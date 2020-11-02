@@ -1,5 +1,6 @@
 const request = require("request");
 const utils = require("./utils");
+const weather = require("./forecast");
 
 // const url =
 //   "http://api.weatherstack.com/current?access_key=9152849ab35309ade422048f5eb3c5d4&query=";
@@ -32,11 +33,30 @@ const utils = require("./utils");
 //   }
 // });
 
-utils.geocode("Edmonton", (error, data) => {
-  if (error) {
-    console.log("Error:", error);
+// utils.geocode("Edmonton", (error, data) => {
+//   if (error) {
+//     console.log("Error:", error);
+//   }
+//   if (data) {
+//     forecast(data.lat, data.lng, (error, data) => {
+//       if (error) {
+//         console.log("Error:", error);
+//       }
+//       if (data) {
+//         console.log("Data", data);
+//       }
+//     });
+//   }
+// });
+
+const getForecast = async (address) => {
+  try {
+    const geodata = await utils.geocodePromise(address);
+    const weatherData = await weather.forecastPromise(geodata.lat, geodata.lng);
+    console.log(weatherData);
+  } catch (err) {
+    console.log(err);
   }
-  if (data) {
-    console.log("Data:", data);
-  }
-});
+};
+
+getForecast("Edmonton");
